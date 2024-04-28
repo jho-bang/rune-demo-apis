@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+    db:
+      image: postgres:latest
+      volumes:
+        - ./data:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=11223344
+        - TZ=Asia/Seoul
+      ports:
+        - "5432:5432"
