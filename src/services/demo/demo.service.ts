@@ -1,4 +1,4 @@
-import { DemoRepositories } from '../../repositories/demo';
+import { DemoRepositories } from '../../repositories/demo/demo.repository';
 import type { InsertDemo } from '../../types';
 
 export class Service {

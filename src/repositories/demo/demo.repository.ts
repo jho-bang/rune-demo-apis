@@ -5,7 +5,11 @@ export class DemoRepositories {
   constructor(private readonly conn: IPool) {}
 
   async query(): Promise<DemoSchema[]> {
-    return this.conn.QUERY`SELECT * FROM demo_table`;
+    return this.conn.QUERY`
+        SELECT * FROM demo_table 
+        WHERE is_deleted = false
+        ORDER BY created DESC;
+    `;
   }
 
   async insert(values: string) {
