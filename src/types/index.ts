@@ -1,3 +1,8 @@
-import type { DemoSchema } from '../db/schema';
+import type { DemoSchema } from "../db/schema";
 
-export interface InsertDemo extends Pick<DemoSchema, 'origin_src'> {}
+export interface InsertDemo extends Pick<DemoSchema, "origin_src"> {}
+
+export interface IQuery {
+  skip?: number;
+  limit?: number;
+}

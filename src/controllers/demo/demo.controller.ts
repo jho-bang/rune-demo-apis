@@ -3,7 +3,7 @@ import multer from "multer";
 
 import { Service } from "../../services/demo/demo.service";
 import { DemoRepositories } from "../../repositories/demo/demo.repository";
-import type { InsertDemo } from "../../types";
+import type { InsertDemo, IQuery } from "../../types";
 
 import DB from "../../db";
 
@@ -18,7 +18,8 @@ const upload = multer({
 const uploadMiddleware = upload.single("my_file");
 
 demoController.get("", async (req, res) => {
-  const data = await service.query();
+  const query = req.query as IQuery;
+  const data = await service.getList(query);
   res.send({ data });
 });
 
