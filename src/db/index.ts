@@ -21,6 +21,8 @@ export interface IPool {
   ASSOCIATE1: any;
   ASSOCIATE_MODULE: any;
   TRANSACTION: any;
+  END: any;
+  FxSQL_DEBUG: any;
 }
 
 class DB {

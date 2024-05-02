@@ -25,6 +25,8 @@ export class DemoRepositories {
         INSERT INTO demo_table ${VALUES(values)}       
       `;
 
+      // throw new Error("error");
+
       await COMMIT();
     } catch (e) {
       console.log(e);

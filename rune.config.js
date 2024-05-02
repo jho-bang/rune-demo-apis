@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 /**
@@ -6,7 +6,7 @@ dotenv.config();
  */
 export default {
   port: process.env.API_PORT,
-  hostname: '0.0.0.0',
-  mode: 'server',
-  serverEntry: './src/index.ts',
+  hostname: "localhost",
+  mode: "server",
+  serverEntry: "./src/index.ts",
 };
