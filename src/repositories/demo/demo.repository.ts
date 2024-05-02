@@ -18,13 +18,17 @@ export class DemoRepositories {
   }
 
   async insert(values: InsertDemo) {
-    const { QUERY, VALUES } = this.conn;
+    const { VALUES } = this.conn;
+    const { QUERY, ROLLBACK, COMMIT } = await this.conn.TRANSACTION();
     try {
       await QUERY`
         INSERT INTO demo_table ${VALUES(values)}       
       `;
+
+      await COMMIT();
     } catch (e) {
       console.log(e);
+      await ROLLBACK();
     }
   }
 }
