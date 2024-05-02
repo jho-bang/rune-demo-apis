@@ -9,7 +9,6 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
 server.use("/files", express.static("files"));
-
 server.use("/api/v1/demo", demoController);
 
 server.get("/", async function (req, res) {

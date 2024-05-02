@@ -4,7 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "pnpm rune dev"
+    "dev": "pnpm rune dev",
+    "api-doc": "swagger-cli bundle ./openapi.yaml --outfile ./build/swagger.yaml --type yaml"
   },
   "keywords": [],
   "author": "",

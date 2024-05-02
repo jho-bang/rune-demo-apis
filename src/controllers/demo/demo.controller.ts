@@ -3,9 +3,10 @@ import multer from "multer";
 
 import { Service } from "../../services/demo/demo.service";
 import { DemoRepositories } from "../../repositories/demo/demo.repository";
-import type { InsertDemo, IQuery } from "../../types";
+import type { InsertDemo } from "../../types";
 
 import DB from "../../db";
+import type { IQuery } from "../../shared/common.type";
 
 export const demoController = express.Router();
 
