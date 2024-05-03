@@ -1,8 +1,12 @@
 import { app } from "@rune-ts/server";
 import express from "express";
 import cors from "cors";
-import { demoController } from "./controllers";
+import { demoController, userController } from "./controllers";
+
 import DB from "./db";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const server = app();
 
@@ -11,8 +15,11 @@ server.use(express.urlencoded({ extended: false }));
 server.use(cors());
 server.use("/files", express.static("files"));
 
+// middleware
+
 // ====== controller ======
 server.use("/api/v1/demo", demoController);
+server.use("/api/v1/user", userController);
 // ====== controller ======
 
 server.onEvent("connect", () => {

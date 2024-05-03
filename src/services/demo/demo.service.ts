@@ -1,12 +1,15 @@
-import { DemoRepositories } from "../../repositories/demo/demo.repository";
-import type { InsertDemo } from "../../types";
-import type { IQuery } from "../../shared/common.type";
+import type { InsertDemo, IQuery } from "../../types";
+import { DemoRepositories } from "../../repositories";
 
-export class Service {
+export class DemoService {
   constructor(private readonly repositories: DemoRepositories) {}
 
-  getList(query: IQuery) {
+  async getList(query: IQuery) {
     return this.repositories.getList(query);
+  }
+
+  async getById(id: number) {
+    return this.repositories.getById(id);
   }
 
   insert(body: InsertDemo) {

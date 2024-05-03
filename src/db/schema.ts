@@ -1,7 +1,15 @@
-export interface DemoSchema {
+export interface CommonSchema {
   id: number;
-  origin_src: string;
-  new_src: string;
   created: Date;
   updated?: Date;
+}
+
+export interface DemoSchema extends CommonSchema {
+  origin_src: string;
+  new_src: string;
+}
+
+export interface UserSchema extends CommonSchema {
+  email: string;
+  password: string;
 }
