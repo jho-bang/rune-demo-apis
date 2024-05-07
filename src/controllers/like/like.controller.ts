@@ -18,7 +18,7 @@ likeController.post(
     const body = req.body as IInsertLike;
     const access_token = (req.headers["access_token"] || "") as string;
     const profile = await userService.profile(access_token);
-    const data = await service.insertLike({
+    const data = await service.like({
       ...body,
       user_id: profile.id,
     });

@@ -5,7 +5,7 @@ import type { CommonResponse, IInsertLike, IUnLike } from "../../types";
 export class LikeRepositories {
   constructor(private readonly conn: IPool) {}
 
-  async insert(values: IInsertLike): Promise<CommonResponse<string>> {
+  async like(values: IInsertLike): Promise<CommonResponse<string>> {
     const { VALUES } = this.conn;
 
     const { QUERY, ROLLBACK, COMMIT } = await this.conn.TRANSACTION();
