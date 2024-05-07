@@ -10,9 +10,3 @@ export function errorHandler(err, req, res, next) {
     message: err.message,
   });
 }
-
-export function verifyToken(req, res, next) {
-  const header = req.headers.authorization;
-
-  next();
-}

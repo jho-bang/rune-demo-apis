@@ -2,20 +2,21 @@ import type { IPool } from "../../db";
 import type { DemoSchema } from "../../db/schema";
 import type {
   CommonResponse,
+  IListQuery,
   InsertDemo,
-  IQuery,
   ResponseDemo,
 } from "../../types";
 
 export class DemoRepositories {
   constructor(private readonly conn: IPool) {}
 
-  async getList(query: IQuery): Promise<CommonResponse<DemoSchema[]>> {
+  async getList(query: IListQuery): Promise<CommonResponse<DemoSchema[]>> {
     const { QUERY } = this.conn;
     try {
       const res = await QUERY`
-        SELECT * FROM demo_table 
-        WHERE is_deleted = false
+        SELECT *, (SELECT count(*) FROM like_demo_table WHERE user_id=${query.user_id} AND demo_id = demo_table.id) as is_like 
+        FROM demo_table
+        WHERE is_deleted = false AND user_id = ${query.user_id}
         ORDER BY created DESC
         OFFSET ${query.skip}
         LIMIT ${query.limit};

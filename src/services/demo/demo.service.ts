@@ -1,10 +1,10 @@
-import type { InsertDemo, IQuery } from "../../types";
+import type { IListQuery, InsertDemo } from "../../types";
 import { DemoRepositories } from "../../repositories";
 
 export class DemoService {
   constructor(private readonly repositories: DemoRepositories) {}
 
-  async getList(query: IQuery) {
+  async getList(query: IListQuery) {
     return this.repositories.getList(query);
   }
 

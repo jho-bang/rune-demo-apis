@@ -1,9 +1,9 @@
 import express from "express";
 import multer from "multer";
 
-import { DemoService } from "../../services";
-import { DemoRepositories } from "../../repositories";
-import type { InsertDemo, IQuery } from "../../types";
+import { DemoService, UserService } from "../../services";
+import { DemoRepositories, UserRepositories } from "../../repositories";
+import type { IListQuery, InsertDemo } from "../../types";
 
 import { errorHandler, wrapAsyncMiddleware } from "../../middlewares";
 
@@ -12,6 +12,7 @@ import DB from "../../db";
 export const demoController = express.Router();
 
 const service = new DemoService(new DemoRepositories(DB.pool));
+const userService = new UserService(new UserRepositories(DB.pool));
 
 const upload = multer({
   dest: "files/",
@@ -22,7 +23,7 @@ const uploadMiddleware = upload.single("my_file");
 demoController.get(
   "",
   wrapAsyncMiddleware(async (req, res) => {
-    const query = req.query as IQuery;
+    const query = req.query as IListQuery;
     const data = await service.getList(query);
     res.send(data);
   }),
@@ -41,7 +42,12 @@ demoController.post(
   "",
   wrapAsyncMiddleware(async (req, res) => {
     const body = req.body as InsertDemo;
-    const data = await service.insert(body);
+    const access_token = (req.headers["access_token"] || "") as string;
+    const profile = await userService.profile(access_token);
+    const data = await service.insert({
+      ...body,
+      user_id: profile.id,
+    });
     res.send(data);
   }),
 );

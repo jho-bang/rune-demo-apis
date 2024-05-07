@@ -1,7 +1,7 @@
 import { app } from "@rune-ts/server";
 import express from "express";
 import cors from "cors";
-import { demoController, userController } from "./controllers";
+import { demoController, likeController, userController } from "./controllers";
 
 import DB from "./db";
 import dotenv from "dotenv";
@@ -20,6 +20,7 @@ server.use("/files", express.static("files"));
 // ====== controller ======
 server.use("/api/v1/demo", demoController);
 server.use("/api/v1/user", userController);
+server.use("/api/v1/like", likeController);
 // ====== controller ======
 
 server.onEvent("connect", () => {

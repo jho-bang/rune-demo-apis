@@ -1,27 +1,23 @@
 import type { IPool } from "../../db";
-import type { CommonResponse, IRegisterUser, ResponseUser } from "../../types";
+import type { IRegisterUser } from "../../types";
 
 export class UserRepositories {
   constructor(private readonly conn: IPool) {}
 
-  async getUserByEmail(email: string): Promise<CommonResponse<ResponseUser>> {
+  async getUserBySns(sns_id: number, sns: string) {
     const { QUERY } = this.conn;
-
     try {
-      const res = await QUERY`
-        SELECT email, password FROM user_table
-        WHERE email = ${email}
+      const user = await QUERY`
+        SELECT * FROM user_table
+        WHERE sns_id=${sns_id} AND sns=${sns}
       `;
 
-      if (!res || !res.length) {
-        throw new Error("NOT FOUND USER", { cause: 400 });
+      if (!sns || !sns.length) {
+        throw new Error("NOT FOUND user");
       }
 
-      return {
-        data: res[0],
-        message: "SUCCESS",
-      };
-    } catch (e: any) {
+      return user[0];
+    } catch (e) {
       throw e;
     }
   }
@@ -31,17 +27,23 @@ export class UserRepositories {
     const { QUERY, ROLLBACK, COMMIT } = await this.conn.TRANSACTION();
 
     try {
-      const res = await QUERY`
-      INSERT INTO user_table ${VALUES(body)}
-      RETURNING *
+      const exists = await QUERY`
+        SELECT count(*) FROM user_table
+        WHERE sns_id=${body.sns_id} AND sns=${body.sns}
+      `;
+
+      const count = exists[0].count;
+
+      if (count !== 0) {
+        return COMMIT();
+      }
+
+      await QUERY`
+        INSERT INTO user_table ${VALUES(body)}
+        RETURNING *
     `;
 
       await COMMIT();
-
-      return {
-        data: res,
-        message: "SUCCESS",
-      };
     } catch (e: any) {
       console.error(e);
       await ROLLBACK();
