@@ -9,13 +9,13 @@ import DB from "../../db";
 
 export const userController = express.Router();
 
-const cache = apicache.middleware;
+const cacheMiddleware = apicache.middleware;
 
 const service = new UserService(new UserRepositories(DB.pool));
 
 userController.get(
   "/profile",
-  cache("60 minutes"),
+  cacheMiddleware("5 minutes"),
   wrapAsyncMiddleware(async (req, res) => {
     const access_token = (req.headers["access_token"] || "") as string;
     const profile = await service.profile(access_token);

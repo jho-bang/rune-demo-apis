@@ -13,7 +13,7 @@ const server = app();
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use(cors());
-server.use("/files", express.static("files"));
+server.use("/files", express.static("files", { maxAge: 86400000 }));
 
 // ====== controller ======
 server.use("/api/v1/demo", demoController);

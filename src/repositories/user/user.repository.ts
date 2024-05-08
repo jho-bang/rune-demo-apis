@@ -39,9 +39,8 @@ export class UserRepositories {
       }
 
       await QUERY`
-        INSERT INTO user_table ${VALUES(body)}
-        RETURNING *
-    `;
+        INSERT INTO user_table ${VALUES(body)}        
+      `;
 
       await COMMIT();
     } catch (e: any) {

@@ -5,11 +5,9 @@ import uuid4 from "uuid4";
 import { DemoService, UserService } from "../../services";
 import { DemoRepositories, UserRepositories } from "../../repositories";
 import type { IListQuery, InsertDemo } from "../../types";
-
 import { errorHandler, wrapAsyncMiddleware } from "../../middlewares";
 
 import DB from "../../db";
-import * as path from "node:path";
 
 export const demoController = express.Router();
 
