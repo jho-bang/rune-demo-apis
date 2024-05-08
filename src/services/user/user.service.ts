@@ -1,7 +1,5 @@
 import type { UserRepositories } from "../../repositories";
 
-import axios from "axios";
-
 export class UserService {
   constructor(private readonly repositories: UserRepositories) {}
 
@@ -11,13 +9,14 @@ export class UserService {
 
   async profile(access_token: string) {
     try {
-      const me = await axios
-        .post(`https://kapi.kakao.com/v2/user/me`, null, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        })
-        .then((res) => res.data);
+      const res = await fetch(`https://kapi.kakao.com/v2/user/me`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      const me = await res.json();
 
       await this.repositories.register({
         sns_id: me.id,

@@ -1,5 +1,6 @@
 import express from "express";
 import multer from "multer";
+import uuid4 from "uuid4";
 
 import { DemoService, UserService } from "../../services";
 import { DemoRepositories, UserRepositories } from "../../repositories";
@@ -8,6 +9,7 @@ import type { IListQuery, InsertDemo } from "../../types";
 import { errorHandler, wrapAsyncMiddleware } from "../../middlewares";
 
 import DB from "../../db";
+import * as path from "node:path";
 
 export const demoController = express.Router();
 
@@ -15,7 +17,16 @@ const service = new DemoService(new DemoRepositories(DB.pool));
 const userService = new UserService(new UserRepositories(DB.pool));
 
 const upload = multer({
-  dest: "files/",
+  storage: multer.diskStorage({
+    filename(req, file, done) {
+      const randomID = uuid4();
+      const filename = `${randomID}.${file.mimetype.split("/")[1]}`;
+      done(null, filename);
+    },
+    destination(req, file, done) {
+      done(null, "files");
+    },
+  }),
 });
 
 const uploadMiddleware = upload.single("my_file");
