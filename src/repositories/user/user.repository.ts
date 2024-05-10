@@ -8,7 +8,7 @@ export class UserRepositories {
     const { QUERY } = this.conn;
     try {
       const user = await QUERY`
-        SELECT * FROM user_table
+        SELECT * FROM users
         WHERE sns_id=${sns_id} AND sns=${sns}
       `;
 
@@ -28,18 +28,18 @@ export class UserRepositories {
 
     try {
       const exists = await QUERY`
-        SELECT count(*) FROM user_table
+        SELECT count(*) FROM users
         WHERE sns_id=${body.sns_id} AND sns=${body.sns}
       `;
 
-      const count = exists[0].count;
+      const count = Number(exists[0].count);
 
       if (count !== 0) {
         return COMMIT();
       }
 
       await QUERY`
-        INSERT INTO user_table ${VALUES(body)}        
+        INSERT INTO users ${VALUES(body)}        
       `;
 
       await COMMIT();

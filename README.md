@@ -38,7 +38,7 @@ $ docker compose up -d
 $ npm run dev
 ```
 
-### AI 서버
-- https://github.com/Sanster/IOPaint (물체 제거)
-- https://github.com/danielgatis/rembg (배경 제거)
+### AI 오픈소스
+- [물체 제거](https://github.com/Sanster/IOPaint)
+- [배경 제거](https://github.com/danielgatis/rembg)
 

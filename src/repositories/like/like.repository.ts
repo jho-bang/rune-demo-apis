@@ -11,10 +11,10 @@ export class LikeRepositories {
     const { QUERY, ROLLBACK, COMMIT } = await this.conn.TRANSACTION();
     try {
       await QUERY`
-        INSERT INTO like_demo_table ${VALUES(values)}`;
+        INSERT INTO likes ${VALUES(values)}`;
 
       await QUERY`
-        UPDATE demo_table SET liked_cnt = liked_cnt + 1
+        UPDATE demos SET liked_cnt = liked_cnt + 1
         WHERE id = ${values.demo_id}
       `;
 
@@ -36,11 +36,11 @@ export class LikeRepositories {
 
     try {
       await QUERY`
-        DELETE FROM like_demo_table WHERE user_id = ${values.user_id} AND demo_id = ${values.demo_id}
+        DELETE FROM likes WHERE user_id = ${values.user_id} AND demo_id = ${values.demo_id}
       `;
 
       await QUERY`
-        UPDATE demo_table SET liked_cnt = liked_cnt - 1
+        UPDATE demos SET liked_cnt = liked_cnt - 1
         WHERE id = ${values.demo_id}
       `;
 

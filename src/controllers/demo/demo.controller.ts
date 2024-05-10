@@ -39,6 +39,15 @@ demoController.get(
 );
 
 demoController.get(
+  "/my/list",
+  wrapAsyncMiddleware(async (req, res) => {
+    const query = req.query as IListQuery;
+    const data = await service.getMyList(query);
+    res.send(data);
+  }),
+);
+
+demoController.get(
   "/:id",
   wrapAsyncMiddleware(async (req, res) => {
     const id = Number(req.params.id);

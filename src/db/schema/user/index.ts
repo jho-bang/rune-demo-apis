@@ -1,7 +1,7 @@
 import type { CommonSchema } from "../common";
 
 export interface UserSchema extends CommonSchema {
-  id: number;
+  user_id: number;
   sns_id: number;
   sns: string;
   username: string;

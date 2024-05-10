@@ -14,8 +14,42 @@ export class DemoRepositories {
     const { QUERY } = this.conn;
     try {
       const res = await QUERY`
-        SELECT *, (SELECT count(*) FROM like_demo_table WHERE user_id=${query.user_id} AND demo_id = demo_table.id) as is_like 
-        FROM demo_table
+        SELECT 
+            D.*,            
+            CASE
+                WHEN L.id IS NOT NULL THEN True
+                ELSE False
+            END AS is_liked            
+        FROM demos D
+        LEFT JOIN likes L ON (D.user_id = L.user_id AND D.id = L.demo_id)
+        WHERE D.is_deleted = false        
+        ORDER BY D.created DESC
+        OFFSET ${query.skip}
+        LIMIT ${query.limit};
+    `;
+
+      return {
+        data: res,
+        message: "SUCCESS",
+      };
+    } catch (e: any) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async getMyList(query: IListQuery): Promise<CommonResponse<DemoSchema[]>> {
+    const { QUERY } = this.conn;
+    try {
+      const res = await QUERY`
+         SELECT 
+            D.*,            
+            CASE
+                WHEN L.id IS NOT NULL THEN True
+                ELSE False
+            END AS is_liked            
+        FROM demos D
+        LEFT JOIN likes L ON (D.user_id = L.user_id AND D.id = L.demo_id)
         WHERE is_deleted = false AND user_id = ${query.user_id}
         ORDER BY created DESC
         OFFSET ${query.skip}
@@ -37,9 +71,29 @@ export class DemoRepositories {
 
     try {
       const res = await QUERY`
-      SELECT * FROM demo_table
-      WHERE id = ${id}
-    `;
+        SELECT 
+          D.*,
+          CASE
+                WHEN L.id IS NOT NULL THEN True
+                ELSE False
+            END AS is_liked,
+          json_agg(
+              json_build_object(
+                  'like_id', L.id,
+                  'created', L.created,
+                  'user_info', json_build_object(
+                      'user_id', U.id,
+                      'username', U.username,
+                      'thumbnail_url', U.thumbnail_url             
+                  )
+              ) ORDER BY L.created DESC
+          ) AS likes
+        FROM demos D
+        LEFT JOIN likes L ON D.id = L.demo_id
+        LEFT JOIN users U ON L.user_id = U.id
+        WHERE D.id = ${id}
+        GROUP BY D.id, L.id;
+      `;
 
       if (!res || !res.length) {
         throw new Error("NOT FOUND DEMO ITEM", { cause: 400 });
@@ -50,6 +104,7 @@ export class DemoRepositories {
         message: "SUCCESS",
       };
     } catch (e: any) {
+      console.error(e);
       throw e;
     }
   }
@@ -59,7 +114,7 @@ export class DemoRepositories {
     const { QUERY, ROLLBACK, COMMIT } = await this.conn.TRANSACTION();
     try {
       const res = await QUERY`
-        INSERT INTO demo_table ${VALUES(values)}       
+        INSERT INTO demos ${VALUES(values)}       
       RETURNING *`;
 
       await COMMIT();

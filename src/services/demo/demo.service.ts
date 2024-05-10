@@ -8,6 +8,10 @@ export class DemoService {
     return this.repositories.getList(query);
   }
 
+  async getMyList(query: IListQuery) {
+    return this.repositories.getMyList(query);
+  }
+
   async getById(id: number) {
     return this.repositories.getById(id);
   }
